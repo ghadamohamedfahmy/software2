@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sharm_elshiekh">
+    tools:context=".Aswan">
 
     <ImageView
         android:id="@+id/imageButton3"

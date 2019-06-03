@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sharm_elshiekh extends AppCompatActivity  implements feedadapter.OnItemClickListener {
+public class Aswan extends AppCompatActivity  implements feedadapter.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private feedadapter mfeedAdapter;
     private ArrayList<recycleviewfeed> recycleview;
@@ -20,7 +20,7 @@ public class sharm_elshiekh extends AppCompatActivity  implements feedadapter.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sharm_elshiekh);
+        setContentView(R.layout.activity_aswan);
 
         mRecyclerView = findViewById(R.id.recyclesharm);
         mRecyclerView.setHasFixedSize(true);

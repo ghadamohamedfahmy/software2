@@ -22,6 +22,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.software.home">
+
+        </activity>
+        <activity
+            android:name="com.example.software.cairo">
+
+        </activity>
+        <activity
+            android:name="com.example.software.firebase_add">
+
+        </activity>
+        <activity
+            android:name="com.example.software.Alex">
+
+        </activity>
+        <activity
+            android:name="com.example.software.luxor">
+
+        </activity>
+        <activity
+            android:name="com.example.software.Aswan">
+
+        </activity>
     </application>
 
 </manifest>

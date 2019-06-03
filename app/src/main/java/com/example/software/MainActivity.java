@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void act(){
-        Intent intent= new Intent(this,firebase_add.class);
+        Intent intent= new Intent(this,home.class);
         //intent.setData(Uri.parse("geo:30.0205786,31.3739956?z=15"));
         startActivity( intent);
     }
