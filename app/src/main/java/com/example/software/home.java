@@ -22,15 +22,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class home extends AppCompatActivity implements feedadapter.OnItemClickListener{
-    private  static final String TAG="home";
+public class home extends AppCompatActivity {
+    //implements feedadapter.OnItemClickListener{
+    private static final String TAG = "home";
     private Spinner spinner;
-    private ImageButton button,bit;
-    private RecyclerView mRecyclerView;
+    private ImageButton button, bit;
+    //private RecyclerView mRecyclerView;
     private TextView mtextView;
-    private feedadapter mfeedAdapter;
+    //private feedadapter mfeedAdapter;
     private ArrayList<recycleviewfeed> recycleview;
-  //  private ArrayList<getdetails> view;
+    //  private ArrayList<getdetails> view;
     private RequestQueue mRequestQueue;
 
     private RecyclerView mmRecyclerView;
@@ -40,6 +41,7 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
 
     private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,27 +57,28 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Cairo");
 
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                Upload upload = postSnapshot.getValue(Upload.class);
-                mUploads.add(upload);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Upload upload = postSnapshot.getValue(Upload.class);
+                    mUploads.add(upload);
+                }
+
+                mAdapter = new ImageAdapter(home.this, mUploads);
+
+                mmRecyclerView.setAdapter(mAdapter);
+                mProgressCircle.setVisibility(View.INVISIBLE);
             }
 
-            mAdapter = new ImageAdapter(home.this, mUploads);
-
-            mRecyclerView.setAdapter(mAdapter);
-            mProgressCircle.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Toast.makeText(home.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            mProgressCircle.setVisibility(View.INVISIBLE);
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(home.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                mProgressCircle.setVisibility(View.INVISIBLE);
+            }
         });
-
-       button = findViewById(R.id.user);
+    }
+}
+       /*button = findViewById(R.id.user);
         mRecyclerView = findViewById(R.id.recyclehome);
         mtextView = findViewById(R.id.textView);
         mRecyclerView.setHasFixedSize(true);
@@ -161,7 +164,6 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
                     }
                 });*/
 
-    }
 
    /* public class ReadData implements ValueEventListener{
 
@@ -176,11 +178,11 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
 
         }
     }*/
-        @Override
-        public void onItemClick ( int position){
+        //@Override
+        //public void onItemClick ( int position){
             // Intent detailIntent = new Intent(this, DetailActivity.class);
             // getdetails clickedItem = view.get(position);
-            recycleviewfeed clickedItem = recycleview.get(position);
+           // recycleviewfeed clickedItem = recycleview.get(position);
 
         /*detailIntent.putExtra(EXTRA_URL, clickedItem.getImageUrl());
         detailIntent.putExtra(EXTRA_CREATOR, clickedItem.getservice());
@@ -194,7 +196,7 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
 
 
         startActivity(detailIntent);*/
-        }
+
    /* public void OpenActivity_arts(){
         //// Intent intent= new Intent(this,activity_.class);
         Intent intent= new Intent (this,Arts.class);
@@ -224,4 +226,3 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
     }*/
 
 
-    }
