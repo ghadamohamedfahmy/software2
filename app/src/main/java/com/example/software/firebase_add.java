@@ -50,12 +50,13 @@ public class firebase_add extends AppCompatActivity {
     }
 
     public void saveNote() {
-        String title = editTextTitle.getText().toString();
+        int title =R.drawable.back;
+                //editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
 
         Map<String, Object> note = new HashMap<>();
         note.put(KEY_TITLE, title);
-        note.put(KEY_DESCRIPTION, description);
+        //note.put(KEY_DESCRIPTION, description);
 
         db.collection("Notebook").document("My First Note").set(note)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

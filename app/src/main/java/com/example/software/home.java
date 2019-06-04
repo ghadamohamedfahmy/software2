@@ -8,15 +8,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 import java.util.ArrayList;
 import java.util.List;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 public class home extends AppCompatActivity implements feedadapter.OnItemClickListener{
     private  static final String TAG="home";
@@ -29,11 +33,47 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
   //  private ArrayList<getdetails> view;
     private RequestQueue mRequestQueue;
 
+    private RecyclerView mmRecyclerView;
+    private ImageAdapter mAdapter;
 
+    private ProgressBar mProgressCircle;
+
+    private DatabaseReference mDatabaseRef;
+    private List<Upload> mUploads;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mmRecyclerView = findViewById(R.id.recyclehome);
+        mmRecyclerView.setHasFixedSize(true);
+        mmRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mProgressCircle = findViewById(R.id.progress_circle);
+
+        mUploads = new ArrayList<>();
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Cairo");
+
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                Upload upload = postSnapshot.getValue(Upload.class);
+                mUploads.add(upload);
+            }
+
+            mAdapter = new ImageAdapter(home.this, mUploads);
+
+            mRecyclerView.setAdapter(mAdapter);
+            mProgressCircle.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Toast.makeText(home.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            mProgressCircle.setVisibility(View.INVISIBLE);
+        }
+        });
 
        button = findViewById(R.id.user);
         mRecyclerView = findViewById(R.id.recyclehome);
@@ -52,7 +92,7 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
         categories.add("Aswan");
         categories.add("Alex");
         categories.add("luxor");
-        categories.add("Sharm EL_Shekhikh");
+        categories.add("Aswan");
         categories.add("Other");
 
         ArrayAdapter<String> dataAdapter;
@@ -83,7 +123,7 @@ public class home extends AppCompatActivity implements feedadapter.OnItemClickLi
 
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
                     //openActivity_carpenter();
-                } else if (parent.getItemAtPosition(position).equals("Sharm EL_Sheikh")) {
+                } else if (parent.getItemAtPosition(position).equals("Aswan")) {
                     String item = parent.getItemAtPosition(position).toString();
 
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();

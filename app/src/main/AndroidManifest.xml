@@ -26,12 +26,13 @@
             android:name="com.example.software.home">
 
         </activity>
+
         <activity
-            android:name="com.example.software.cairo">
+            android:name="com.example.software.firebase_add">
 
         </activity>
         <activity
-            android:name="com.example.software.firebase_add">
+            android:name="com.example.software.cairo">
 
         </activity>
         <activity
