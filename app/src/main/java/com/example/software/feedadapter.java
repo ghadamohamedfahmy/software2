@@ -9,89 +9,61 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public  class feedadapter extends RecyclerView.Adapter<feedadapter.feedViewHolder> {
-    private Context mcontext;
-    private ArrayList<recycleviewfeed> mrecycle;
- //   private ArrayList<getdetails> mview;
-    private OnItemClickListener mListener;
+public  class feedadapter extends RecyclerView.Adapter<feedadapter.MyViewHolder>{
+        List<Upload> mhome;
+        Context context;
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = listener;
-    }
-  /*  public feedadapter(Context context, ArrayList<recycleviewfeed> recycle,ArrayList<getdetails> view){
-        mcontext =context;
-        mrecycle=recycle;
-       mview=view;
-    }*/
-    public feedadapter(Context context, ArrayList<recycleviewfeed> recycle){
-        mcontext =context;
-        mrecycle=recycle;
-
-    }
-
-
-    @Override
-    public feedViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-
-        View v = LayoutInflater.from(mcontext).inflate(R.layout.activity_recycleviewfeed, parent, false);
-        return new feedViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder( feedViewHolder feedViewHolder, int i) {
-        recycleviewfeed currentItem = mrecycle.get(i);
-
-        String imageUrl = currentItem.getImageUrl();
-        String creatorName = currentItem.getservice();
-        int likeCount = currentItem.getrateCount();
-        String name = currentItem.getspname();
-
-        feedViewHolder.sname.setText(creatorName);
-
-
-        feedViewHolder.spname.setText(name);
-        feedViewHolder.ratem.setRating(likeCount);
-        // Picasso.get().load(imageUrl).placeholder(R.drawable.default_pic).into(imageView);mcontext
-        Picasso.with(mcontext).load(imageUrl).into(feedViewHolder.image);
-        Picasso.with(mcontext).load(imageUrl).fit().centerInside().into(feedViewHolder.image);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mrecycle.size() ;
-    }
-
-    public class  feedViewHolder  extends RecyclerView.ViewHolder {
-        public ImageView image;
-        public TextView spname;
-        public TextView sname;
-        public RatingBar ratem;
-        public  feedViewHolder(View itemView){
-            super(itemView);
-            image = itemView.findViewById(R.id.imageplace);
-            spname=itemView.findViewById(R.id.place);
-            sname=itemView.findViewById(R.id.country);
-            ratem=itemView.findViewById(R.id.ratingBar);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            mListener.onItemClick(position);
-                        }
-                    }
-                }
-            });
+public feedadapter(Context context,List HomeList) {
+        this.context=context;
+        this.mhome = HomeList;
         }
+@Override
+public int getItemCount() {
+        return mhome.size();
+        }
+
+@Override
+public feedadapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.activity_recycleviewfeed,parent, false);
+        return new feedadapter.MyViewHolder(v);
+        }
+
+@Override
+public void onBindViewHolder(MyViewHolder holder, final int position) {
+        // set the data in items
+          Upload recyclehome = mhome.get(position);
+   holder.placeTitle.setText(recyclehome.getTitle().toString());
+    String value =recyclehome.getImageUrl().toString();
+    Picasso.with(context).load(value).into(holder.placeImage);
+       /* Glide.with(context)
+        .load(((Upload) recyclehome).getImageUrl())
+        .thumbnail(Glide.with(context).load(R.drawable.giphy))
+        .apply(new RequestOptions()
+        .error(R.drawable.broken_image))
+        .into(holder.placeImage);*/
+        }
+public class MyViewHolder extends RecyclerView.ViewHolder {
+    public TextView placeTitle;
+    public ImageView placeImage;
+    public TextView  cityTitle;
+    public RatingBar rating;
+    public MyViewHolder(View view) {
+        super(view);
+        placeTitle=(TextView)view.findViewById(R.id.place);
+       // cityTitle  =(TextView)view.findViewById(R.id.city);
+        placeImage=view.findViewById(R.id.imageplace);
+      //  rating=view.findViewById(R.id.ratingBar);
+    }
+}
+
+    public Upload getRestaurant(int position) {
+        return mhome.get(position);
     }
 }

@@ -1,7 +1,14 @@
 package com.example.software;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,71 +31,80 @@ import com.google.firebase.database.ValueEventListener;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class home extends AppCompatActivity {
+public class home extends AppCompatActivity implements recycleviewfeed.OnReclyclerClickListener{
+    String imageUrl;
+    String title;
     //implements feedadapter.OnItemClickListener{
-    private static final String TAG = "home";
+    static final String TAG = "home";
     private Spinner spinner;
     private ImageButton button, bit;
-    //private RecyclerView mRecyclerView;
+    NetworkInfo netInfo;
+
     private TextView mtextView;
-    //private feedadapter mfeedAdapter;
+    feedadapter mfeedAdapter;
     private ArrayList<recycleviewfeed> recycleview;
-    //  private ArrayList<getdetails> view;
+        List mhome = new ArrayList<Upload>();
     private RequestQueue mRequestQueue;
-
-    private RecyclerView mmRecyclerView;
+    RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
-
     private ProgressBar mProgressCircle;
+    private DatabaseReference mDatabase;
+    //private List<Upload> mUploads;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
 
-    private DatabaseReference mDatabaseRef;
-    private List<Upload> mUploads;
 
+    DatabaseReference child = myRef.child("home");
+    //@RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       // mDatabase = FirebaseDatabase.getInstance().getReference("Cairo");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mmRecyclerView = findViewById(R.id.recyclehome);
-        mmRecyclerView.setHasFixedSize(true);
-        mmRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        netInfo = conMgr.getActiveNetworkInfo();
+        mRecyclerView = findViewById(R.id.recyclehome);
+        mRecyclerView.addOnItemTouchListener(new recycleviewfeed(this,mRecyclerView,this));
+       // mRecyclerView.setHasFixedSize(true);
+       // mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProgressCircle = findViewById(R.id.progress_circle);
+        button = findViewById(R.id.user);
+        mtextView = findViewById(R.id.textView);
 
-        mUploads = new ArrayList<>();
+        child.addChildEventListener(new ChildEventListener() {
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Cairo");
-
-        mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Upload upload = postSnapshot.getValue(Upload.class);
-                    mUploads.add(upload);
-                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                loadData(dataSnapshot);
 
-                mAdapter = new ImageAdapter(home.this, mUploads);
+            }
 
-                mmRecyclerView.setAdapter(mAdapter);
-                mProgressCircle.setVisibility(View.INVISIBLE);
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                loadData(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(home.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                mProgressCircle.setVisibility(View.INVISIBLE);
+
             }
         });
-    }
-}
-       /*button = findViewById(R.id.user);
-        mRecyclerView = findViewById(R.id.recyclehome);
-        mtextView = findViewById(R.id.textView);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        recycleview = new ArrayList<>();
+       // recycleview = new ArrayList<>();
         //  view = new ArrayList<>();
-        mRequestQueue = Volley.newRequestQueue(this);
+      //  mRequestQueue = Volley.newRequestQueue(this);
         spinner = findViewById(R.id.spinner1);
         // button = findViewById(R.id.selectcategory);
         List<String> categories = new ArrayList<>();
@@ -95,7 +113,6 @@ public class home extends AppCompatActivity {
         categories.add("Aswan");
         categories.add("Alex");
         categories.add("luxor");
-        categories.add("Aswan");
         categories.add("Other");
 
         ArrayAdapter<String> dataAdapter;
@@ -119,18 +136,18 @@ public class home extends AppCompatActivity {
 
                     //show selected spinner item
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
-                    //OpenActivity_arts();
+                    OpenActivity_arts();
                     //anything else you want to do on item selection do here
                 } else if (parent.getItemAtPosition(position).equals("luxor")) {
                     String item = parent.getItemAtPosition(position).toString();
 
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
-                    //openActivity_carpenter();
+                    openActivity_carpenter();
                 } else if (parent.getItemAtPosition(position).equals("Aswan")) {
                     String item = parent.getItemAtPosition(position).toString();
 
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
-                    //openActivity_real();
+                    openActivity_real();
                 } else {
                     String item = parent.getItemAtPosition(position).toString();
                     Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
@@ -144,7 +161,30 @@ public class home extends AppCompatActivity {
 
                 // TODO Auto-generated method stub
             }
-        });
+        });}
+    final ArrayAdapter<String> arrayAdapter =new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,mhome);
+    private void loadData(DataSnapshot dataSnapshot) {
+        Upload restaurant=dataSnapshot.getValue(Upload.class);
+        mhome.add(restaurant);
+        mfeedAdapter = new feedadapter(home.this, mhome);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setAdapter(mfeedAdapter);
+        mProgressCircle.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void onItemClick(View view, int postition) {
+        /*Intent intent = new Intent(this,RestaurantDetails.class);
+        intent.putExtra("RESTAURANT_TRANSFER", mfeedAdapter.getRestaurant(postition));
+        startActivity(intent);*/
+    }
+
+    @Override
+    public void onItemLongClick(View view, int postition) {
+
+    }
+
         // DocumentReference docRef = db.collection("country").document("name");
 
        /* db.collection("country")
@@ -197,32 +237,31 @@ public class home extends AppCompatActivity {
 
         startActivity(detailIntent);*/
 
-   /* public void OpenActivity_arts(){
+    public void OpenActivity_arts(){
         //// Intent intent= new Intent(this,activity_.class);
-        Intent intent= new Intent (this,Arts.class);
+        Intent intent= new Intent (this,cairo.class);
         startActivity( intent);
 
     }
     public void openActivity_carpenter(){
-        //// Intent intent= new Intent(this,activity
-        _.class);
-        Intent intent= new Intent (this,Carpenter.class);
+
+        Intent intent= new Intent (this,Aswan.class);
         startActivity( intent);
 
     }
     public void openActivity_real(){
         //// Intent intent= new Intent(this,activity_.class);
-        Intent intent= new Intent (this,Real_Estate.class);
+        Intent intent= new Intent (this,Alex.class);
         startActivity( intent);
 
     }
     public void open_addd_services(){
-        Intent intent= new Intent(this,service_add.class);
+        Intent intent= new Intent(this,luxor.class);
         startActivity( intent);
     }
     public void req(){
-        Intent intent= new Intent(this, profile.class);
+        Intent intent= new Intent(this, others.class);
         startActivity( intent);
-    }*/
-
+    }
+}
 

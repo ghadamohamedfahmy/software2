@@ -1,36 +1,99 @@
 package com.example.software;
 
-public class Upload {
+import java.io.Serializable;
+import java.util.List;
 
-    private String mName;
-    private String mImageUrl;
+public class Upload implements Serializable {
+    private static final long serialVersionUID=1L;
 
-    public Upload() {
-        //empty constructor needed
+    String title;
+    String address;
+    String cuisines;
+    String imageUrl;
+    String openingHours;
+    String highlights;
+    String cost;
+    List<String> menuImages;
+    String latitude;
+    String longitude;
+
+    public String getTitle() {
+        return title;
     }
 
-    public Upload(String name, String imageUrl) {
-        if (name.trim().equals("")) {
-            name = "No Name";
-        }
-
-        mName = name;
-        mImageUrl = imageUrl;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getName() {
-        return mName;
+    public String getAddress() {
+        return address;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCuisines() {
+        return cuisines;
+    }
+
+    public void setCuisines(String cuisines) {
+        this.cuisines = cuisines;
     }
 
     public String getImageUrl() {
-        return mImageUrl;
+        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
-        mImageUrl = imageUrl;
+        this.imageUrl = imageUrl.toString();
+    }
+
+    public String getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(String openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public String getHighlights() {
+        return highlights;
+    }
+
+    public void setHighlights(String highlights) {
+        this.highlights = highlights;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<String> getMenuImages() {
+        return menuImages;
+    }
+
+    public void setMenuImages(List<String> menuImages) {
+        this.menuImages = menuImages;
     }
 }

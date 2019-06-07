@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.software">
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,6 +20,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Database"></activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC3z5aF5PofVwhKnepcHtCbdDn6OdvJgdM" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".others" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,31 +44,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.example.software.home">
-
-        </activity>
-
-        <activity
-            android:name="com.example.software.firebase_add">
-
-        </activity>
-        <activity
-            android:name="com.example.software.cairo">
-
-        </activity>
-        <activity
-            android:name="com.example.software.Alex">
-
-        </activity>
-        <activity
-            android:name="com.example.software.luxor">
-
-        </activity>
-        <activity
-            android:name="com.example.software.Aswan">
-
-        </activity>
+        <activity android:name=".home"></activity>
+        <activity android:name=".firebase_add"></activity>
+        <activity android:name=".cairo"></activity>
+        <activity android:name=".Alex"></activity>
+        <activity android:name=".luxor"></activity>
+        <activity android:name=".Aswan"></activity>
+        <activity android:name=".home" />
+        <activity android:name=".cairo" />
+        <activity android:name=".firebase_add" />
+        <activity android:name=".Alex" />
+        <activity android:name=".luxor" />
+        <activity android:name=".Aswan" />
     </application>
 
 </manifest>

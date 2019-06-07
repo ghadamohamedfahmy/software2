@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -11,7 +12,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.List;
 
-public class others extends AppCompatActivity implements feedadapter.OnItemClickListener {
+public class others extends AppCompatActivity implements  recycleviewfeed.OnReclyclerClickListener{
     private RecyclerView mRecyclerView;
     private feedadapter mfeedAdapter;
     private ArrayList<recycleviewfeed> recycleview;
@@ -34,11 +35,15 @@ public class others extends AppCompatActivity implements feedadapter.OnItemClick
 
     }
 
+
+
     @Override
-    public void onItemClick(int position) {
-        //  Intent detailIntent = new Intent(this, detailarts.class);
-        // getdetails clickedItem = view.get(position);
-        recycleviewfeed clickedItem = recycleview.get(position);
-        // startActivity(detailIntent);
+    public void onItemClick(View view, int postition) {
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int postition) {
+
     }
 }
